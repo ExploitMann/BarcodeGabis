@@ -194,7 +194,7 @@ async function genGabisBarcode(barcodes) {
                 color: rgb(0, 0, 0)
             });
             
-            /* дата виробу */
+            /* дата */
             const dateText = "Дата виробу:";
             const dateSize = 6;
             const dateHeight = DejaVuSerifCondensedBoldFont.heightAtSize(dateSize);
