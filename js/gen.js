@@ -233,7 +233,7 @@ async function genGabisBarcode(barcodes) {
             const importerText = "Імпортер:";
             const importerTextSize = 6;
             const importerTextWidth = DejaVuSerifCondensedBoldFont.widthOfTextAtSize(importerText, importerTextSize);
-            const importerHeight = DejaVuSerifCondensedBoldFont.heightAtSize(importerTextSize);
+            const importerTextHeight = DejaVuSerifCondensedBoldFont.heightAtSize(importerTextSize);
             
             page.drawText(importerText, {
                 x: paddingPx.left,
@@ -243,11 +243,15 @@ async function genGabisBarcode(barcodes) {
                 color: rgb(0, 0, 0)
             });
             
+            const maxImporterSize = 6;
+            const maxImporterWidth = maxWidthPx - barcodeFontSize - importerTextWidth;
             const importerWidth = DejaVuSerifCondensedFont.widthOfTextAtSize(barcodes[i].importer, 1);
-            const importerSize = (maxWidthPx - importerTextWidth - 2 - barcodeFontSize) / importerWidth;
-            
+            const importerSize = ((maxImporterWidth / importerWidth) <= maxImporterSize) ? (maxImporterWidth / importerWidth) : maxImporterSize;            
+            const importerRealWidth = DejaVuSerifCondensedFont.widthOfTextAtSize(barcodes[i].importer, importerSize);
+            const importerHeight = DejaVuSerifCondensedFont.heightAtSize(importerSize);
+            const importerHeightMax = DejaVuSerifCondensedBoldFont.heightAtSize(maxImporterSize);
             page.drawText(barcodes[i].importer, {
-                x: paddingPx.left + importerTextWidth + 2,
+                x: paddingPx.left + importerTextWidth,
                 y: pageHeightPx - paddingPx.top - 7 - colorTextHeight - artikleCodeHeight - countryHeight - dateHeight - supplierHeight,
                 size: importerSize,
                 font: DejaVuSerifCondensedFont,
@@ -328,7 +332,7 @@ async function genGabisBarcode(barcodes) {
             if(multiText.lines.length == 2) {
                 const nameSecondLine = multiText.lines[1].text;
                 const nameSecondLineWidth = DejaVuSerifCondensedBoldFont.widthOfTextAtSize(nameSecondLine, nameSize);
-                const nameSecondLineY = pageHeightPx - paddingPx.top - 7 - colorTextHeight - artikleCodeHeight - countryHeight - dateHeight - supplierHeight - importerHeight - nameHeight / 2 - nameHeight;
+                const nameSecondLineY = pageHeightPx - paddingPx.top - 7 - colorTextHeight - artikleCodeHeight - countryHeight - dateHeight - supplierHeight - importerTextHeight - nameHeight / 2 - nameHeight;
                 page.drawText(nameSecondLine, {
                     x: paddingPx.left + (nameContainerWidth / 2) - (nameSecondLineWidth / 2),
                     y: nameSecondLineY,
